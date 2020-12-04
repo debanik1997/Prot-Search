@@ -25,7 +25,9 @@ def get_current_time():
 @app.route('/api/protein', methods=['GET', 'POST'])
 def protein_query():
     if request.method == 'POST':
-        return {"Method": "Post"}
+        data = request.get_json()
+        pattern = data["pattern"]
+        return {"pattern": pattern}
     else:
         return {"Method": "Get"}
 

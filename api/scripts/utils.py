@@ -30,4 +30,3 @@ def create_protein_map(f, num_proteins, delim='|'):
         protein_dict[protein_id] = seq
 
     return protein_dict
-    
