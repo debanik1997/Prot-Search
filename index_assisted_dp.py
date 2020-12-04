@@ -1,3 +1,15 @@
+'''
+This python code matches given DNA read with protein database using a kmer index
+and a dp based edit distance
+
+Written for Group 63 Project, Computational Genomics Fa 2020
+
+Usage:
+
+python index_assisted_dp.py
+
+'''
+
 import sys
 from six_frame_translation import six_frame_translation
 from collections import defaultdict
@@ -7,7 +19,7 @@ import numpy as np
 KMER_FILE = 'kmer_dict_k_4_num_prots_2.pickle'
 UNIPROT_FILE = 'uniprot_sprot.fasta'
 
-def trace(dp, x, y)->int:
+def trace(dp, x, t)->int:
     '''
     Backtrace edit-distance matrix D for strings x and y
     Returns the index at which the trace started
@@ -20,12 +32,12 @@ def trace(dp, x, y)->int:
     ind -> int
     '''
 
-    i, j = len(x), len(y)
+    i, j = len(x), len(t)
     while i > 0:
         diag, vert, horz = float('inf'), float('inf'), float('inf')
         delta = None
         if i > 0 and j > 0:
-            delta = 0 if x[i-1] == y[j-1] else 1
+            delta = 0 if x[i-1] == t[j-1] else 1
             diag = dp[i-1, j-1] + delta
         if i > 0:
             vert = dp[i-1, j] + 1
@@ -69,35 +81,35 @@ def dp_edit(p,t):
     return trace_start_ind, min_ed
 
 
-def query(read, max_mismatch = 4):
+def query(read, kmer_dict, protein_dict, max_mismatch = 4, l = 4):
     """ Function that outputs (approximate) matches of a DNA read against
     a protein database. Implemented using k-mers and the pigeonhole principle.
 
-    Assumes max number of mismatches is fixed (4)
-    Assumes length of read is fixed (60)
+    Default value of l-mer length is 4
+    Default value of max mismatches allowed is 4
 
-    Does not account for gaps or insertions (only mismatches)
     """
-    assert (len(read) == 60)
 
-    # kmer_dict holds mapping from {kmer: [(protein_id, offset)]}
-    kmer_dict = read_from_pickle(KMER_FILE)
-
-    # protein_dict holds mapping from {protein_id : protein_seq}
-    protein_dict = create_protein_map(UNIPROT_FILE, 1)
+    #will throw AssertionError if we can't make >max_mismatch partitions of size l
+    '''
+    Min # of partitions needed for pigeonhole = (l*max_mismatch+1)
+    Min read length = min # partitions * 3
+    '''
+    min_rl = 3*(l*max_mismatch + 1)
+    assert len(read)>= min_rl, f'Please enter a read of length {min_rl} or higher'
 
     # get amino acid sequence by six frame translation
     prot_translations = six_frame_translation(read)
-    print(prot_translations)
     # Result stored as a dict of tuples (id, offset)->edit_distance
     occurrences = {}
+    seen = set()
 
     for protein in prot_translations:
-        for i in range(len(protein)//4): # for all 15 partitions
+        for i in range(len(protein) - l + 1): # for all 5 partitions
 
             # for each partition
-            part_off = 4*i
-            part = protein[part_off:part_off+4]
+            part_off = i
+            part = protein[part_off:part_off+l]
 
             if part not in kmer_dict:
                 continue
@@ -105,14 +117,15 @@ def query(read, max_mismatch = 4):
             # hits is a list of [(protein_id, offset_in_protein)]
             hits = kmer_dict[part]
 
-
             for (id, offset) in hits:
                 t = protein_dict[id]
 
                 if len(t) == 0:
                     continue
 
-                '''count_mismatch = 0
+                '''
+                Old code: just here for reference
+                count_mismatch = 0
 
                 if offset - part_off + len(protein) <= len(t) and offset - part_off >= 0:
                     for j in range(0, len(protein)):
@@ -131,43 +144,69 @@ def query(read, max_mismatch = 4):
                 # right edge of T to include in DP matrix
                 rt = min(len(t), offset - part_off + len(protein) + max_mismatch)
 
+                # check if we have seen this substring before
+                if (id, lf, rt) in seen:
+                    continue
+
+                seen.add((id, lf, rt))
+
                 # get min edit distance, and start offset of traceback
                 start_off, min_ed = dp_edit(protein, t[lf:rt])
-
                 start_off += lf # get actual offset in original protein
 
                 if min_ed <= max_mismatch:
                     occurrences[(id, start_off)] = min_ed
-
 
     return occurrences
 
 # Test Cases
 def main():
 
+    # kmer_dict holds mapping from {kmer: [(protein_id, offset)]}
+    kmer_dict = read_from_pickle(KMER_FILE)
+
+    # protein_dict holds mapping from {protein_id : protein_seq}
+    protein_dict = create_protein_map(UNIPROT_FILE, 1)
+
+
+    #########################################
+    # Testing on some inputs
+    #########################################
     # test protein = "ATGGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG"
     # pid = "Q6GZX4"
 
+    # length = 50 - should fail
+    try:
+        occ = query("TTGGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCG", kmer_dict, protein_dict)
+    except AssertionError as e:
+        # will print assertion error
+        print(e, '. Continuing with other tests.')
+
+    # 1 insertion and 1 deletion - should pass
+    occ = query("TTGGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGCG", kmer_dict, protein_dict)
+    assert ("Q6GZX4", 0) in occ, print(occ)
+
     # 1 Mismatch - should pass
-    occ = query("TTGGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG")
-    print(occ)
+    occ = query("TTGGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG", kmer_dict, protein_dict)
     assert(("Q6GZX4", 0) in occ)
 
     # 2 Mismatches - should pass
-    occ = query("TTTGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG")
+    occ = query("TTTGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG", kmer_dict, protein_dict)
     assert(("Q6GZX4", 0) in occ)
 
     # 3 Mismatches - should pass
-    occ = query("TTTGCGTTTAGCGCGGAAGATGTTCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG")
+    occ = query("TTTGCGTTTAGCGCGGAAGATGTTCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG", kmer_dict, protein_dict)
     assert(("Q6GZX4", 0) in occ)
 
     # 4 Mismatches - should pass
-    occ = query("TTTGCGTTTAGCGCGGAAGATGTTCTGAGAGAATATGATCGCCGCCGCCGCATGGAAGCG")
+    occ = query("TTTGCGTTTAGCGCGGAAGATGTTCTGAGAGAATATGATCGCCGCCGCCGCATGGAAGCG", kmer_dict, protein_dict)
     assert(("Q6GZX4", 0) in occ)
 
     # > 4 Mismatches - should fail
-    occ = query("TTGCTTTAGCGCGGAAGATGTTCTGAGAGAAGTATGATCGCCGCCGCCACATGGAAGCTG")
+    occ = query("TTGCTTTAGCGCGGAAGATGTTCTGAGAGAAGTATGATCGCCGCCGCCACATGGAAGCTG", kmer_dict, protein_dict)
     assert(("Q6GZX4", 0) not in occ)
+
+    print('All passed')
 
 
 if __name__ == "__main__":
