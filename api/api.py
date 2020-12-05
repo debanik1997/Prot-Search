@@ -2,9 +2,11 @@
 # Imports
 #----------------------------------------------------------------------------#
 
+import sys
 from flask import Flask, request
 import time
 import os
+from matching.pigeonhole_principle_approximate_match import query
 
 #----------------------------------------------------------------------------#
 # App Config.
