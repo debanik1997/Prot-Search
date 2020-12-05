@@ -1,12 +1,17 @@
 #----------------------------------------------------------------------------#
 # Imports
 #----------------------------------------------------------------------------#
-
 import sys
+sys.path.append('./matching')
+import pigeonhole_principle_approximate_match
+import index_assisted_dp
+import utils
 from flask import Flask, request
 import time
 import os
-from matching.pigeonhole_principle_approximate_match import query
+
+KMER_FILE = 'matching/kmer_dict_k_4_num_prots_2.pickle'
+UNIPROT_FILE = 'matching/uniprot_sprot.pickle'
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -28,14 +33,19 @@ def get_current_time():
 def protein_query():
     if request.method == 'POST':
         data = request.get_json()
-        pattern = data["pattern"]
-        return {"pattern": pattern}
+        kmer_dict = utils.read_from_pickle(KMER_FILE)
+        protein_dict = utils.read_from_pickle(UNIPROT_FILE)
+        if data['gaps_allowed']:
+            return {'match': list( index_assisted_dp.query(data['pattern'], kmer_dict, protein_dict, data["max_mismatches"]))}
+        else:
+            return {'match': list(pigeonhole_principle_approximate_match.query(data['pattern'], kmer_dict, protein_dict, data["max_mismatches"]))}
     else:
-        return {"Method": "Get"}
+        return {"status": "ok"}
 
 #----------------------------------------------------------------------------#
 # Launch.
 #----------------------------------------------------------------------------#
+
 
 # Default port:
 if __name__ == '__main__':

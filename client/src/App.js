@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import React, { useState } from "react";
+import SearchBar from "material-ui-search-bar";
+import "./App.css";
 
 function App() {
-  const [currentTime, setCurrentTime] = useState(0);
-
-  useEffect(() => {
-    fetch('/api/time').then(res => res.json()).then(data => {
-      setCurrentTime(data.time);
-    });
-  }, []);
+  const [searchText, setSearchText] = useState('');
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>The current time is {currentTime}.</p>
-      </header>
+    <div className="content">
+      <SearchBar
+        value={searchText}
+        onChange={(newSearchText) => setSearchText(newSearchText)}
+        onRequestSearch={() => console.log(searchText)}
+      />
     </div>
   );
 }
