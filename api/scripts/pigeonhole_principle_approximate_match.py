@@ -6,7 +6,7 @@ from utils import *
 KMER_FILE = 'kmer_dict_k_4_num_prots_2.pickle'
 UNIPROT_FILE = 'uniprot_sprot.fasta'
 
-def query(p):
+def query(p, kmer_dict, protein_dict):
     """ Function that outputs (approximate) matches of a DNA read against 
     a protein database. Implemented using k-mers and the pigeonhole principle.
 
@@ -15,12 +15,6 @@ def query(p):
     Does not account for gaps or insertions (only mismatches)
     """
     assert (len(p) == 60)
-
-    # kmer_dict holds mapping from {kmer: [(protein_id, offset)]}
-    kmer_dict = read_from_pickle(KMER_FILE)
-
-    # protein_dict holds mapping from {protein_id : protein_seq}
-    protein_dict = create_protein_map(UNIPROT_FILE, 1)
 
     translations = six_frame_translation(p)
     mm = 4
@@ -54,27 +48,32 @@ def query(p):
 
 # Test Cases
 def main():
+     # kmer_dict holds mapping from {kmer: [(protein_id, offset)]}
+    kmer_dict = read_from_pickle(KMER_FILE)
+
+    # protein_dict holds mapping from {protein_id : protein_seq}
+    protein_dict = create_protein_map(UNIPROT_FILE, 1)
 
     p = "ATGGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG"
 
     # 1 Mismatch - should pass
-    occ = query("TTGGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG")
+    occ = query("TTGGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG", kmer_dict, protein_dict)
     assert(("Q6GZX4", 0) in occ)
 
     # 2 Mismatches - should pass
-    occ = query("TTTGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG")
+    occ = query("TTTGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG", kmer_dict, protein_dict)
     assert(("Q6GZX4", 0) in occ)
 
     # 3 Mismatches - should pass
-    occ = query("TTTGCGTTTAGCGCGGAAGATGTTCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG")
+    occ = query("TTTGCGTTTAGCGCGGAAGATGTTCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG", kmer_dict, protein_dict)
     assert(("Q6GZX4", 0) in occ)
 
     # 4 Mismatches - should pass
-    occ = query("TTTGCGTTTAGCGCGGAAGATGTTCTGAGAGAATATGATCGCCGCCGCCGCATGGAAGCG")
+    occ = query("TTTGCGTTTAGCGCGGAAGATGTTCTGAGAGAATATGATCGCCGCCGCCGCATGGAAGCG", kmer_dict, protein_dict)
     assert(("Q6GZX4", 0) in occ)
 
     # > 4 Mismatches - should fail
-    occ = query("TTGCTTTAGCGCGGAAGATGTTCTGAGAGAAGTATGATCGCCGCCGCCACATGGAAGCTG")
+    occ = query("TTGCTTTAGCGCGGAAGATGTTCTGAGAGAAGTATGATCGCCGCCGCCACATGGAAGCTG", kmer_dict, protein_dict)
     assert(("Q6GZX4", 0) not in occ)
 
 
