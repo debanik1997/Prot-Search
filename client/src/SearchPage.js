@@ -6,10 +6,35 @@ export default function SearchPage() {
   const [searchText, setSearchText] = useState("");
   const [maxMismatches] = useState(4);
   const [gapsAllowed] = useState(false);
+  const [results, setResults] = useState([]);
   const [redirect, setRedirect] = useState(false);
 
   const handleSearch = () => {
-    setRedirect(true);
+    const form = {
+      max_mismatches: maxMismatches,
+      pattern: searchText,
+      gaps_allowed: gapsAllowed,
+    };
+    fetch("/api/protein", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    })
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            if (data.match) {
+              setResults(data.match);
+              setRedirect(true);
+            }
+          });
+        } else {
+          alert("Error with search");
+        }
+      })
+      .catch(() => {
+        alert("Error with search");
+      });
   };
 
   if (redirect) {
@@ -18,9 +43,7 @@ export default function SearchPage() {
         push
         to={{
           pathname: "/results",
-          searchText: searchText,
-          maxMismatches: maxMismatches,
-          gapsAllowed: gapsAllowed,
+          results: results,
         }}
       />
     );
