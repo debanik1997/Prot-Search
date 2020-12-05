@@ -2,22 +2,22 @@ import sys
 from six_frame_translation import six_frame_translation
 from collections import defaultdict
 from utils import *
+import pickle
 
 KMER_FILE = 'kmer_dict_k_4_num_prots_2.pickle'
 UNIPROT_FILE = 'uniprot_sprot.fasta'
 
-def query(p, kmer_dict, protein_dict):
+def query(p, kmer_dict, protein_dict, max_mismatch=4):
     """ Function that outputs (approximate) matches of a DNA read against 
     a protein database. Implemented using k-mers and the pigeonhole principle.
 
-    Assumes number of mismatches is fixed (4)
+    Default number of mismatches is fixed (4)
     Assumes length of p is fixed (60)
     Does not account for gaps or insertions (only mismatches)
     """
     assert (len(p) == 60)
 
     translations = six_frame_translation(p)
-    mm = 4
     
     # Result stored as a set of tuples (id, offset)
     occurrences = set()
@@ -40,9 +40,9 @@ def query(p, kmer_dict, protein_dict):
                     for j in range(0, len(translation)): 
                         if t[offset-off+j] != translation[j]:
                             nmm += 1
-                            if nmm > mm:
+                            if nmm > max_mismatch:
                                 break
-                    if nmm <= mm:
+                    if nmm <= max_mismatch:
                         occurrences.add((id, offset-off))  
     return occurrences
 
@@ -52,7 +52,7 @@ def main():
     kmer_dict = read_from_pickle(KMER_FILE)
 
     # protein_dict holds mapping from {protein_id : protein_seq}
-    protein_dict = create_protein_map(UNIPROT_FILE, 1)
+    protein_dict = create_protein_map(UNIPROT_FILE, 1)# Store data (serialize)
 
     p = "ATGGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG"
 
