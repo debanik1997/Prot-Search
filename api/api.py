@@ -10,8 +10,8 @@ from flask import Flask, request
 import time
 import os
 
-KMER_FILE = 'matching/kmer_dict_k_4_num_prots_2.pickle'
-UNIPROT_FILE = 'matching/uniprot_sprot.pickle'
+KMER_FILE = 'matching/kmer_dict_k_4_num_prots_100.pickle'
+UNIPROT_FILE = 'matching/protein_dict_num_prots_100.pickle'
 
 #----------------------------------------------------------------------------#
 # App Config.
