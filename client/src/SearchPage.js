@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import "./SearchPage.css"
+import "./SearchPage.css";
 
 export default function SearchPage() {
   const [searchText, setSearchText] = useState("");
@@ -50,7 +50,7 @@ export default function SearchPage() {
   }
 
   return (
-    <div>
+    <div className="searchPage">
       <h1>Welcome to ProtSearch</h1>
       <input
         name="text"
@@ -59,7 +59,7 @@ export default function SearchPage() {
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
       />
-      <button onClick={handleSearch}>Search</button>
+      <button className="searchButton" onClick={handleSearch}>Search</button>
     </div>
   );
 }
