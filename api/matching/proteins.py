@@ -31,7 +31,7 @@ def main():
 
     outfile = f"protein_dict_num_prots_{num_proteins}.pickle"
     with open(outfile, 'wb') as f:
-        pickle.dump(protein_dict, f, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(protein_dict, f, pickle.DEFAULT_PROTOCOL)
 
 
 if __name__ == "__main__":

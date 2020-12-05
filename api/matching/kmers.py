@@ -75,7 +75,7 @@ def main():
         # print(kmers)
         with open(outfile, 'wb') as f:
             # HIGHEST_PROTOCOL means use the fastest protocal available
-            pickle.dump(kmers, f, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(kmers, f, pickle.DEFAULT_PROTOCOL)
 
 
 main()
