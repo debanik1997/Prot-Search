@@ -1,10 +1,28 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
+
 export default function SearchPage() {
   const [searchText, setSearchText] = useState("");
+  const [maxMismatches] = useState(4);
+  const [gapsAllowed] = useState(false);
+  const [redirect, setRedirect] = useState(false);
 
   const handleSearch = () => {
-    console.log(searchText);
+    setRedirect(true);
   };
+
+  if (redirect) {
+    return (
+      <Redirect
+        push to={{
+          pathname: "/results",
+          searchText: searchText,
+          maxMismatches: maxMismatches,
+          gapsAllowed: gapsAllowed
+        }}
+      />
+    );
+  }
 
   return (
     <div>
