@@ -4,7 +4,8 @@ from collections import defaultdict
 from utils import *
 import pickle
 
-KMER_FILE = 'kmer_dict_k_4_num_prots_2.pickle'
+KMER_DICT_FILE = 'kmer_dict_k_4_num_prots_2.pickle'
+PROTEIN_DICT_FILE = 'protein_dict_num_prots_100.pickle'
 UNIPROT_FILE = 'uniprot_sprot.fasta'
 
 def query(p, kmer_dict, protein_dict, max_mismatch=4):
@@ -48,11 +49,8 @@ def query(p, kmer_dict, protein_dict, max_mismatch=4):
 
 # Test Cases
 def main():
-     # kmer_dict holds mapping from {kmer: [(protein_id, offset)]}
-    kmer_dict = read_from_pickle(KMER_FILE)
-
-    # protein_dict holds mapping from {protein_id : protein_seq}
-    protein_dict = create_protein_map(UNIPROT_FILE, 1)# Store data (serialize)
+    kmer_dict = read_from_pickle(KMER_DICT_FILE)
+    protein_dict = read_from_pickle(PROTEIN_DICT_FILE)
 
     p = "ATGGCGTTTAGCGCGGAAGATGTGCTGAAAGAATATGATCGCCGCCGCCGCATGGAAGCG"
 
@@ -75,6 +73,8 @@ def main():
     # > 4 Mismatches - should fail
     occ = query("TTGCTTTAGCGCGGAAGATGTTCTGAGAGAAGTATGATCGCCGCCGCCACATGGAAGCTG", kmer_dict, protein_dict)
     assert(("Q6GZX4", 0) not in occ)
+
+    print("All passed")
 
 
 if __name__ == "__main__":

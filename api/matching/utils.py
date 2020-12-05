@@ -1,18 +1,16 @@
 import pickle
 
 def read_from_pickle(f):
-    """ Reads the kmer dictionary from file """
+    """ Reads a dictionary from file """
     kmer_dict = {}
     with open(f, "rb") as fd:
-        kmer_dict = pickle.load(fd)
-    return kmer_dict
+        dictionary = pickle.load(fd)
+    return dictionary
 
-def create_protein_map(f, num_proteins, delim='|'):
-    """ Creates a map from {protein_id: protein_sequence} for num_proteins proteins """
+def fasta_iterator(f, num_proteins, delim='|'):
+    """ An iterator to iterate through a fasta file. Yields a tuple of (protein id, protein sequence) """
     with open(f) as fd:
       lines = fd.readlines()
-    
-    protein_dict = {}
     line_idx = 0
 
     for i in range(num_proteins):
@@ -27,6 +25,5 @@ def create_protein_map(f, num_proteins, delim='|'):
                 break
             seq += line
             line_idx += 1
-        protein_dict[protein_id] = seq
-
-    return protein_dict
+        
+        yield (protein_id, seq)
