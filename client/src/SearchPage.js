@@ -5,7 +5,7 @@ import "./SearchPage.css"
 export default function SearchPage() {
   const [searchText, setSearchText] = useState("");
   const [maxMismatches] = useState(4);
-  const [gapsAllowed, setGapsAllowed] = useState(false);
+  const [gapsAllowed] = useState(false);
   const [redirect, setRedirect] = useState(false);
 
   const handleSearch = () => {
