@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
+import "./SearchPage.css"
 
 export default function SearchPage() {
   const [searchText, setSearchText] = useState("");
   const [maxMismatches] = useState(4);
-  const [gapsAllowed] = useState(false);
+  const [gapsAllowed, setGapsAllowed] = useState(false);
   const [redirect, setRedirect] = useState(false);
 
   const handleSearch = () => {
@@ -14,11 +15,12 @@ export default function SearchPage() {
   if (redirect) {
     return (
       <Redirect
-        push to={{
+        push
+        to={{
           pathname: "/results",
           searchText: searchText,
           maxMismatches: maxMismatches,
-          gapsAllowed: gapsAllowed
+          gapsAllowed: gapsAllowed,
         }}
       />
     );
