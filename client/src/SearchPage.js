@@ -72,7 +72,7 @@ export default function SearchPage() {
               checked={gapsAllowed}
               onChange={(e) => setGapsAllowed(e.target.checked)}
             />
-            <span className="checkboxText" style={{marginLeft: 10}}>Insertions and Deletions allowed?</span>
+            <span className="checkboxText" style={{marginLeft: 10}}>Gaps allowed?</span>
           </label>
         </div>
       </div>
