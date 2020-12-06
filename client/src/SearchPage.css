@@ -6,7 +6,7 @@
 h1 {
   color: #ffffff;
   margin-top: 25%;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   font-family: ShareTech-Regular;
   font-style: normal;
 }
@@ -34,12 +34,23 @@ input {
   border-radius: 10px;
   font-size: 18px;
   color: white;
-  background: linear-gradient(264.14deg, #EF9FCB 0%, #F54CEE 47.25%, #716BFB 92.7%);
+  background: linear-gradient(
+    264.14deg,
+    #ef9fcb 0%,
+    #f54cee 47.25%,
+    #716bfb 92.7%
+  );
   width: 120px;
   height: 57px;
   border: none;
 }
 
 .results {
-    margin-top: 2%;
+  margin-top: 2%;
+}
+
+.checkboxText {
+  font-family: ShareTech-Regular;
+  font-style: normal;
+  color: white;
 }

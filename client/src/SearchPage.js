@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
+import LoadingDNA from "./LoadingDNA";
+import Checkbox from "./Checkbox";
 import "./SearchPage.css";
 
 export default function SearchPage() {
   const [searchText, setSearchText] = useState("");
   const [maxMismatches] = useState(4);
-  const [gapsAllowed] = useState(false);
+  const [gapsAllowed, setGapsAllowed] = useState(false);
   const [results, setResults] = useState([]);
   const [redirect, setRedirect] = useState(false);
 
@@ -50,16 +52,30 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="searchPage">
-      <h1>Welcome to ProtSearch</h1>
-      <input
-        name="text"
-        type="text"
-        placeholder="Search"
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-      />
-      <button className="searchButton" onClick={handleSearch}>Search</button>
-    </div>
+    <>
+      <div className="searchPage">
+        <h1>Welcome to ProtSearch</h1>
+        <LoadingDNA />
+        <input
+          name="text"
+          type="text"
+          placeholder="Type a DNA read here..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+        <button className="searchButton" onClick={handleSearch}>
+          Search
+        </button>
+        <div>
+          <label>
+            <Checkbox
+              checked={gapsAllowed}
+              onChange={(e) => setGapsAllowed(e.target.checked)}
+            />
+            <span className="checkboxText" style={{marginLeft: 10}}>Insertions and Deletions allowed?</span>
+          </label>
+        </div>
+      </div>
+    </>
   );
 }
