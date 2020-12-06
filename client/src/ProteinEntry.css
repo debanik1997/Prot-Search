@@ -1,0 +1,10 @@
+@font-face {
+  font-family: ShareTech-Regular;
+  src: url("./fonts/Kayak\ Sans\ Regular.otf");
+}
+
+.proteinCard {
+  font-family: ShareTech-Regular;
+  font-style: normal;
+  color: white;
+}
