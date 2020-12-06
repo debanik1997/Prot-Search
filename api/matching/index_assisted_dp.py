@@ -18,7 +18,6 @@ import numpy as np
 
 KMER_DICT_FILE = 'kmer_dict_k_4_num_prots_2.pickle'
 PROTEIN_DICT_FILE = 'protein_dict_num_prots_100.pickle'
-UNIPROT_FILE = 'uniprot_sprot.fasta'
 
 def trace(dp, x, t)->int:
     '''
