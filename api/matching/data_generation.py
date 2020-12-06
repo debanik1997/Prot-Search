@@ -8,6 +8,7 @@ Writes reads to an output file test_reads.txt
 '''
 import argparse
 import random
+from utils import fasta_iterator
 
 # Duplicate keys would be overwritten with a value that came later
 inverse_codon_map = {
@@ -77,11 +78,12 @@ inverse_codon_map = {
     'G':'GGG', 
 }
 
-def complement(codon):
-    if codon == 'A': return 'T'
-    if codon == 'T': return 'A'
-    if codon == 'C': return 'G'
-    if codon == 'G': return 'C'
+codon_map = {
+    0: 'A',
+    1: 'C',
+    2: 'G',
+    3: 'T'
+}
 
 def generate_test_reads(infile, seed, num_errors, num_reads, n):
     # Initialize random seed
@@ -100,7 +102,7 @@ def generate_test_reads(infile, seed, num_errors, num_reads, n):
         # Find a random read of length p
         start_idx = random.randint(0, len(seq)-p-1)
         end_idx = start_idx + p
-        rand_prot = seq[start_idx:end_idx+1]
+        rand_prot = seq[start_idx:end_idx]
 
         # Expand the rand_seq to a DNA Read using the inverse codon map
         rand_dna = []
@@ -111,9 +113,10 @@ def generate_test_reads(infile, seed, num_errors, num_reads, n):
         # TODO: Insert num_errors errors in rand_dna. Currently only mismatches
         for i in range(num_errors):
             error_idx = random.randint(0, len(rand_dna)-1)
-            # Replace with the complement
+            # Replace with a random codon
             old_codon = rand_dna[error_idx]
-            rand_dna[error_idx] = complement(old_codon)
+            rand_idx = random.randint(0, 3)
+            rand_dna[error_idx] = codon_map[rand_idx]
 
         rand_dna = "".join(rand_dna)
         # Write to out-file
