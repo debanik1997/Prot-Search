@@ -25,6 +25,7 @@ export default function Results(props) {
             key={result[0]}
             proteinID={result[0]}
             offset={result[1]}
+            score={result[2]}
           />
         );
       })}

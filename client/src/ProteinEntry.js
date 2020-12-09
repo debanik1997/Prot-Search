@@ -18,12 +18,13 @@ export default function ProteinEntry(props) {
             gene: entry.gene[0].name[0]._,
             organism: entry.organism[0].name[0]._,
             proteinID: props.proteinID,
+            score: props.score,
           };
           setProtein(proteinData);
           setIsLoaded(true);
         });
       });
-  }, [props.proteinID, props.offset]);
+  }, [props.proteinID, props.offset, props.score]);
 
   if (!isLoaded) {
     return <></>;
@@ -31,6 +32,7 @@ export default function ProteinEntry(props) {
   return (
     <div className="proteinCard">
       <p>Name: {protein.proteinName}</p>
+      <p>Mismatch Score: {protein.score}</p>
       <p>Protein: {protein.protein}</p>
       <p>Gene: {protein.gene}</p>
       <p>Organism: {protein.organism}</p>
