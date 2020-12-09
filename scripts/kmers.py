@@ -4,7 +4,7 @@ Python program to crete kmers from uniprot fasta file
 Code used for Computational Genomics Projects Fa 2020
 
 Usage:
-python kmers.py --infile ../data/uniprot_sprot.pickle -k 5 -n 100
+python kmers.py --infile ../data/protein_dict_num_prots_100.pickle -k 5 -n 100
 '''
 
 import argparse

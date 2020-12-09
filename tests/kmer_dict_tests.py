@@ -1,3 +1,10 @@
+'''
+Prints summary of creation runtime and size of dictionary for l-mer preprocessing
+
+Usage:
+python3 kmer_dict_tests.py
+'''
+
 import pickle
 import numpy as np
 import os
