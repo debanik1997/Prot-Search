@@ -7,17 +7,23 @@ Written for Group 63 Project, Computational Genomics Fa 2020
 Usage:
 
 python index_assisted_dp.py
-
 '''
 
 import sys
 from six_frame_translation import six_frame_translation
 from collections import defaultdict
-from utils import *
 import numpy as np
+import pickle
 
-KMER_DICT_FILE = 'kmer_dict_k_4_num_prots_2.pickle'
-PROTEIN_DICT_FILE = 'protein_dict_num_prots_100.pickle'
+KMER_DICT_FILE = '../../data/kmer_dict_k_4_num_prots_100.pickle'
+PROTEIN_DICT_FILE = '../../data/protein_dict_num_prots_100.pickle'
+
+def read_from_pickle(f):
+    """ Reads a dictionary from file """
+    kmer_dict = {}
+    with open(f, "rb") as fd:
+        dictionary = pickle.load(fd)
+    return dictionary
 
 def trace(dp, x, t)->int:
     '''

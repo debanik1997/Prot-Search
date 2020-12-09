@@ -3,19 +3,33 @@
 #----------------------------------------------------------------------------#
 import sys
 sys.path.append('./matching')
-import pigeonhole_principle_approximate_match
-import index_assisted_dp
-import utils
-from flask import Flask, request
-import time
-import os
 
-KMER_FILE = 'matching/kmer_dict_k_4_num_prots_100.pickle'
-UNIPROT_FILE = 'matching/protein_dict_num_prots_100.pickle'
+import pickle
+import os
+import time
+from flask import Flask, request, jsonify
+import index_assisted_dp
+import pigeonhole_principle_approximate_match
+
+KMER_FILE = '../data/kmer_dict_k_4_num_prots_100.pickle'
+UNIPROT_FILE = '../data/protein_dict_num_prots_100.pickle'
+
+#----------------------------------------------------------------------------#
+# Functions
+#----------------------------------------------------------------------------#
+
+
+def read_from_pickle(f):
+    """ Reads a dictionary from file """
+    kmer_dict = {}
+    with open(f, "rb") as fd:
+        dictionary = pickle.load(fd)
+    return dictionary
 
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
+
 
 app = Flask(__name__)
 
@@ -33,12 +47,16 @@ def get_current_time():
 def protein_query():
     if request.method == 'POST':
         data = request.get_json()
-        kmer_dict = utils.read_from_pickle(KMER_FILE)
-        protein_dict = utils.read_from_pickle(UNIPROT_FILE)
+        kmer_dict = read_from_pickle(KMER_FILE)
+        protein_dict = read_from_pickle(UNIPROT_FILE)
         if data['gaps_allowed']:
-            return {'match': list( index_assisted_dp.query(data['pattern'], kmer_dict, protein_dict, data["max_mismatches"]))}
+            matches = index_assisted_dp.query(data['pattern'], kmer_dict, protein_dict, data["max_mismatches"])
+            matches_as_list = [(k[0], k[1], v) for k,v in matches.items()] 
+            return {"match": matches_as_list}
         else:
-            return {'match': list(pigeonhole_principle_approximate_match.query(data['pattern'], kmer_dict, protein_dict, data["max_mismatches"]))}
+            matches = pigeonhole_principle_approximate_match.query(data['pattern'], kmer_dict, protein_dict, data["max_mismatches"])
+            matches_as_list = [(k[0], k[1], v) for k,v in matches.items()] 
+            return {"match": matches_as_list}
     else:
         return {"status": "ok"}
 

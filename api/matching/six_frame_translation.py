@@ -1,6 +1,5 @@
 import sys
 
-
 def reverse_complement(s):
     complement_map = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
     output = []
@@ -9,7 +8,6 @@ def reverse_complement(s):
             output.append(complement_map[c])
     return ''.join(output[::-1])
 
-
 def three_frame_translation(s):
     frame_0 = [s[i:i+3] for i in range(0, len(s), 3)]
     frame_1 = [s[1:][i:i+3] for i in range(0, len(s[1:]), 3)]
@@ -17,7 +15,6 @@ def three_frame_translation(s):
     frame_2 = [s[2:][i:i+3] for i in range(0, len(s[2:]), 3)]
     frame_2.insert(0, s[:2])
     return [frame_0, frame_1, frame_2]
-
 
 def six_frame_translation(s):
     output = []

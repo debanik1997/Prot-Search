@@ -1,14 +1,37 @@
 '''
 Script to generate random reads from a given FASTA file
 
-Example Usage:
-python3 data_generation.py --infile uniprot_sprot.fasta --seed 1 --num_errors 4 --num_reads 5 --read_length 60 
+Example Usage (without insertions):
+python3 data_generation.py --infile uniprot_sprot.fasta --seed 1 --num_errors 4 --num_reads 5 --read_length 60 --no-gaps
+
+Example Usage (insertions):
+python3 data_generation.py --infile uniprot_sprot.fasta --seed 1 --num_errors 4 --num_reads 5 --read_length 60 --gaps
 
 Writes reads to an output file test_reads.txt
 '''
 import argparse
 import random
-from utils import fasta_iterator
+
+def fasta_iterator(f, num_proteins, delim='|'):
+    """ An iterator to iterate through a fasta file. Yields a tuple of (protein id, protein sequence) """
+    with open(f) as fd:
+      lines = fd.readlines()
+    line_idx = 0
+
+    for i in range(num_proteins):
+        line = lines[line_idx].strip()
+        protein_id = line.split(delim)[1]
+        seq = ""
+        line_idx += 1
+
+        while True:
+            line = lines[line_idx].strip()
+            if line[0] < 'A' or line[0] > 'Z':
+                break
+            seq += line
+            line_idx += 1
+        
+        yield (protein_id, seq)
 
 # Duplicate keys would be overwritten with a value that came later
 inverse_codon_map = {
@@ -78,16 +101,12 @@ inverse_codon_map = {
     'G':'GGG', 
 }
 
-codon_map = {
-    0: 'A',
-    1: 'C',
-    2: 'G',
-    3: 'T'
-}
-
-def generate_test_reads(infile, seed, num_errors, num_reads, n):
+def generate_test_reads(infile, seed, num_errors, num_reads, n, gaps):
     # Initialize random seed
     random.seed(seed)
+
+    keys = list(inverse_codon_map.keys())
+    proteins = list(filter(lambda x: x != '*', keys))
 
     # We want a protein sequence of n/3 since 3 DNA Codons map to 1 protein
     p = n // 3
@@ -102,23 +121,45 @@ def generate_test_reads(infile, seed, num_errors, num_reads, n):
         # Find a random read of length p
         start_idx = random.randint(0, len(seq)-p-1)
         end_idx = start_idx + p
-        rand_prot = seq[start_idx:end_idx]
+
+        # Move to the next protein
+        if (end_idx >= len(seq)):
+            continue
+
+        rand_prot = list(seq[start_idx:end_idx])
+
+        if gaps:
+            choices = ["Mismatch", "Gap", "Insertion"]
+        else:
+            choices = ["Mismatch"]
+
+        # Insert errors in the protein
+        for i in range(num_errors):
+            error_idx = random.randint(0, len(rand_prot) - 1)
+            # Randomly either replace/insert/delete from this position
+            choice = random.choice(choices)
+            if choice == "Mismatch":
+                # Replace with a random protein
+                prot = random.choice(proteins)
+                rand_prot[error_idx] = prot
+            if choice == "Gap":
+                rand_prot.pop(error_idx)
+            if choice == "Insertion":
+                # Insert a random protein
+                prot = random.choice(proteins)
+                rand_prot.insert(error_idx, prot)
 
         # Expand the rand_seq to a DNA Read using the inverse codon map
         rand_dna = []
         for c in rand_prot:
             dna = inverse_codon_map[c].replace("U", "T")
-            rand_dna += list(dna)
-
-        # TODO: Insert num_errors errors in rand_dna. Currently only mismatches
-        for i in range(num_errors):
-            error_idx = random.randint(0, len(rand_dna)-1)
-            # Replace with a random codon
-            old_codon = rand_dna[error_idx]
-            rand_idx = random.randint(0, 3)
-            rand_dna[error_idx] = codon_map[rand_idx]
+            rand_dna.append(dna)
 
         rand_dna = "".join(rand_dna)
+
+        if (not gaps):
+            assert len(rand_dna) == n
+
         # Write to out-file
         f.write(f"{rand_dna}\n")
 
@@ -136,15 +177,20 @@ def main():
                     help='Maximum number of reads to generate')
     ap.add_argument('--read_length', type=int, default=60,
                     help='Read length')
+    ap.add_argument('--gaps', dest='gaps', action='store_true')
+    ap.add_argument('--no-gaps', dest='gaps', action='store_false')
+    ap.set_defaults(gaps=False)
 
     args = ap.parse_args()
+
     infile = args.infile
     seed = args.seed
     num_errors = args.num_errors
     num_reads = args.num_reads
     n = args.read_length
+    gaps = args.gaps
 
-    generate_test_reads(infile, seed, num_errors, num_reads, n)
+    generate_test_reads(infile, seed, num_errors, num_reads, n, gaps)
 
 if __name__ == "__main__":
     main()
