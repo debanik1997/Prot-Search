@@ -4,7 +4,6 @@ Script to create a map from {protein_id: protein_sequence}
 Example:
 python3 proteins.py --infile uniprot_sprot.fasta --num_proteins 100
 '''
-from utils import fasta_iterator
 import argparse
 import pickle
 
@@ -26,7 +25,7 @@ def fasta_iterator(f, num_proteins, delim='|'):
                 break
             seq += line
             line_idx += 1
-        
+
         yield (protein_id, seq)
 
 def create_protein_map(f, num_proteins):
