@@ -5,8 +5,9 @@ and a dp based edit distance
 Written for Group 63 Project, Computational Genomics Fa 2020
 
 Usage:
+python3 index_assisted_dp.py
 
-python index_assisted_dp.py
+Acknowledgement: Some of this code was derived from http://bit.ly/CG_kEdit_idx
 '''
 
 import sys
@@ -111,9 +112,9 @@ def query(read, kmer_dict, protein_dict, max_mismatch = 4, l = 4):
     seen = set()
 
     for protein in prot_translations:
-        for i in range(len(protein) - l + 1): # for all 5 partitions
+        for i in range(len(protein) - l + 1): # for all lmers
 
-            # for each partition
+            # for each l-mer
             part_off = i
             part = protein[part_off:part_off+l]
 
@@ -128,21 +129,6 @@ def query(read, kmer_dict, protein_dict, max_mismatch = 4, l = 4):
 
                 if len(t) == 0:
                     continue
-
-                '''
-                Old code: just here for reference
-                count_mismatch = 0
-
-                if offset - part_off + len(protein) <= len(t) and offset - part_off >= 0:
-                    for j in range(0, len(protein)):
-                        if t[offset-part_off+j] != protein[j]:
-                            count_mismatch += 1
-                            if count_mismatch > max_mismatch:
-                                break
-                    if count_mismatch <= max_mismatch:
-                        occurrences.add((id, offset-part_off))
-                        break # now check the next possible protein in database
-                '''
 
                 # left edge of T to include in DP matrix
                 lf = max(0, offset - part_off - max_mismatch)
