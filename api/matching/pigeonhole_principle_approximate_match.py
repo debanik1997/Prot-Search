@@ -13,7 +13,8 @@ def query(p, kmer_dict, protein_dict, max_mismatch=4):
     Does not account for gaps or insertions (only mismatches)
     """
     min_rl = 4*(max_mismatch + 1)*3
-    assert len(p) >= min_rl, f"Enter a read of length {min_rl} or higher"
+    if (len(p) < min_rl):
+        return []
     translations = six_frame_translation(p)
     
     # Result stored as a dictionary of (id, offset) : num_mismatches
