@@ -1,12 +1,10 @@
 import sys
-from six_frame_translation import six_frame_translation
-from collections import defaultdict
-from utils import *
 import pickle
-from memory_profiler import profile
+from collections import defaultdict
+from six_frame_translation import six_frame_translation
 
-KMER_DICT_FILE = 'kmer_dict_k_4_num_prots_100.pickle'
-PROTEIN_DICT_FILE = 'protein_dict_num_prots_100.pickle'
+KMER_DICT_FILE = '../../data/kmer_dict_k_4_num_prots_100.pickle'
+PROTEIN_DICT_FILE = '../../data/protein_dict_num_prots_100.pickle'
 
 def query(p, kmer_dict, protein_dict, max_mismatch=4):
     """ Function that outputs (approximate) matches of a DNA read against 
@@ -15,7 +13,7 @@ def query(p, kmer_dict, protein_dict, max_mismatch=4):
     Does not account for gaps or insertions (only mismatches)
     """
     min_rl = 4*(max_mismatch + 1)*3
-    assert(len(p) >= min_rl, f"Enter a read of length {min_rl} or higher")
+    assert len(p) >= min_rl, f"Enter a read of length {min_rl} or higher"
     translations = six_frame_translation(p)
     
     # Result stored as a dictionary of (id, offset) : num_mismatches
@@ -44,6 +42,13 @@ def query(p, kmer_dict, protein_dict, max_mismatch=4):
                     if nmm <= max_mismatch:
                         occurrences[(id, offset-off)] = nmm
     return occurrences
+
+def read_from_pickle(f):
+    """ Reads a dictionary from file """
+    kmer_dict = {}
+    with open(f, "rb") as fd:
+        dictionary = pickle.load(fd)
+    return dictionary
 
 def main():
     kmer_dict = read_from_pickle(KMER_DICT_FILE)
