@@ -8,6 +8,7 @@ import index_assisted_dp
 from flask import Flask, request
 import time
 import os
+import pickle
 
 KMER_FILE = '../data/kmer_dict_k_4_num_prots_100.pickle'
 UNIPROT_FILE = '../data/protein_dict_num_prots_100.pickle'
