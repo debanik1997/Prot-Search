@@ -121,6 +121,11 @@ def generate_test_reads(infile, seed, num_errors, num_reads, n, gaps):
         # Find a random read of length p
         start_idx = random.randint(0, len(seq)-p-1)
         end_idx = start_idx + p
+
+        # Move to the next protein
+        if (end_idx >= len(seq)):
+            continue
+
         rand_prot = list(seq[start_idx:end_idx])
 
         if gaps:

@@ -6,13 +6,13 @@ from six_frame_translation import six_frame_translation
 KMER_DICT_FILE = '../../data/kmer_dict_k_4_num_prots_100.pickle'
 PROTEIN_DICT_FILE = '../../data/protein_dict_num_prots_100.pickle'
 
-def query(p, kmer_dict, protein_dict, max_mismatch=4):
+def query(p, kmer_dict, protein_dict, max_mismatch=4, l=4):
     """ Function that outputs (approximate) matches of a DNA read against 
     a protein database. Implemented using k-mers and the pigeonhole principle.
 
     Does not account for gaps or insertions (only mismatches)
     """
-    min_rl = 4*(max_mismatch + 1)*3
+    min_rl = l*(max_mismatch + 1)*3
     if (len(p) < min_rl):
         return []
     translations = six_frame_translation(p)
@@ -21,9 +21,9 @@ def query(p, kmer_dict, protein_dict, max_mismatch=4):
     occurrences = {}
 
     for translation in translations:
-        for i in range(len(translation) // 4):
-            off = 4*i
-            part = translation[off:off+4]
+        for i in range(len(translation) // l):
+            off = l*i
+            part = translation[off:off+l]
 
             if part not in kmer_dict:
                 continue
