@@ -2,7 +2,7 @@
 Prints a summary of execution time and memory usage
 
 Example
-python3 test_suite.py --infile test_reads.txt -mm 4 -l 4
+python3 test_suite.py --infile test_reads.txt --mm 4 --l 4
 """
 
 import argparse
@@ -13,9 +13,6 @@ import sys
 sys.path.append('../api/matching')
 from index_assisted_dp import query as index_assisted_query
 from pigeonhole_principle_approximate_match import query as pigeonhole_query
-
-KMER_FILE = '../data/kmer_dict_k_4_num_prots_100.pickle'
-PROTEIN_FILE = '../data/protein_dict_num_prots_100.pickle'
 
 def read_from_pickle(f):
     """ Reads a dictionary from file """
@@ -28,7 +25,7 @@ def profile(func):
     def wrapper(reads, kmer_dict, protein_dict, mm, l):
         tracemalloc.start()
         start_time = timer()
-        func(reads, kmer_dict, protein_dict)
+        func(reads, kmer_dict, protein_dict, mm, l)
         end_time = timer()
         _, peak = tracemalloc.get_traced_memory()
         print(f"Peak Memory Usage: {peak / 10**3}KB")
@@ -44,11 +41,10 @@ def print_occurences(read, occ):
         print(f"{protein_id} \t {offset} \t \t {v}")
 
 @profile
-def pigeonhole_test(reads, kmer_dict, protein_dict, mm = 4, l=4):
+def pigeonhole_test(reads, kmer_dict, protein_dict, mm=4, l=4):
     print("l-mer Filtration Algorithm:")
     for read in reads:
-        # change here!
-        occ = pigeonhole_query(read, kmer_dict, protein_dict, max_mismatch = mm)
+        occ = pigeonhole_query(read, kmer_dict, protein_dict, max_mismatch=mm, l=l)
         if len(occ) == 0:
             print("No occurrences found")
             continue
@@ -79,7 +75,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--infile', type=str, required=True,
                     help='path to test_reads file')
-    ap.add_argument('-l', type = str, default = '4',
+    ap.add_argument('--l', type = str, default = '4',
                     help='length of lmer')
     ap.add_argument('--mm', type = int, default = 4,
                     help='Maximum mismatches allowed for pigeonhole')
@@ -89,6 +85,7 @@ def main():
     mm = args.mm
 
     KMER_FILE = '../data/kmer_dict_k_' + l + '_num_prots_100.pickle'
+    PROTEIN_FILE = '../data/protein_dict_num_prots_100.pickle'
     kmer_dict = read_from_pickle(KMER_FILE)
     protein_dict = read_from_pickle(PROTEIN_FILE)
 

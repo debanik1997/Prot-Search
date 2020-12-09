@@ -72,7 +72,7 @@ def main():
 
         # now store kmers to file using pickle
         print('Dumping dictionary ..')
-        # print(kmers)
+        # print(len(kmers.keys()))
         with open(outfile, 'wb') as f:
             # HIGHEST_PROTOCOL means use the fastest protocal available
             pickle.dump(kmers, f, pickle.DEFAULT_PROTOCOL)
