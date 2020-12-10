@@ -16,6 +16,7 @@ Computational Genomics Final Project - Shreyas Aiyar, Debanik Purkayastha, Ishit
             ├── neighbourhood.py                            # Neighbourhood search algorithm implementation
             ├── pigeonhole_principle_approximate_match.py   # L-mer filtration algorithm implementation
             ├── six_frame_translation.py                    # Six frame translation implementation
+            ├── blast.py                                    # Trial implementation of blast.py
         ├── api.py
     ├── client                                              # Web app files
     ├── tests
