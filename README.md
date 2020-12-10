@@ -34,10 +34,10 @@ Computational Genomics Final Project - Shreyas Aiyar, Debanik Purkayastha, Ishit
 
 To run the web app specifically, make sure your machine has Node.js installed. After installing Node.js, make sure that yarn is accessible as a package manager.
 
-Node.js - https://nodejs.org/en/download/
-yarn - https://classic.yarnpkg.com/en/docs/install/#mac-stable
+Node.js - https://nodejs.org/en/download/  
+yarn - https://classic.yarnpkg.com/en/docs/install/#mac-stable  
 
-Also, to generate some supporting files, you would require the Uniprot FASTA file which can be downloaded from:
+Also, to generate some supporting files, you would require the Uniprot FASTA file which can be downloaded from:  
 Uniprot FASTA File - ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
 
 ## Web-App
