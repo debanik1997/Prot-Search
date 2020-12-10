@@ -27,15 +27,19 @@ Computational Genomics Final Project - Shreyas Aiyar, Debanik Purkayastha, Ishit
         ├── proteins.py                                     # Script to generate protein id dictionary file
     ├── data                                                # Stores supporting dictionary files in .pickle format
     ├── contributions.txt
+    ├── recording                                           # Screen recording of the web app
     └── README.md
 
 ## Requirements
-```
+
 To run the web app specifically, make sure your machine has Node.js installed. After installing Node.js, make sure that yarn is accessible as a package manager.
 
 Node.js - https://nodejs.org/en/download/
 yarn - https://classic.yarnpkg.com/en/docs/install/#mac-stable
-```
+
+Also, to generate some supporting files, you would require the Uniprot FASTA file which can be downloaded from:
+Uniprot FASTA File - ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+
 ## Web-App
 ### To start server
 From root directory
@@ -58,7 +62,8 @@ cd ..
 
 ### Benchmarking/Profiling Algorithms
 
-Note: Generate synthetic reads prior to this
+Note: Generate synthetic reads prior to this  
+Smaller values of L would take a while to run
 ```
 cd tests
 python3 test_suite.py --infile test_reads.txt --mm 4 --l 4
