@@ -38,7 +38,9 @@ Node.js - https://nodejs.org/en/download/
 yarn - https://classic.yarnpkg.com/en/docs/install/#mac-stable  
 
 Also, to generate some supporting files, you would require the Uniprot FASTA file which can be downloaded from:  
-Uniprot FASTA File - ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+Uniprot FASTA File - ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz  
+
+Place the Uniprot File in /data directory once downloaded
 
 ## Web-App
 ### To start server
@@ -56,7 +58,7 @@ cd client && yarn install && yarn start
 ### Generating Synthetic Reads
 ```
 cd tests
-python3 data_generation.py --infile uniprot_sprot.fasta --seed 1 --num_errors 4 --num_reads 5 --read_length 60 --no-gaps
+python3 data_generation.py --infile ../data/uniprot_sprot.fasta --seed 1 --num_errors 4 --num_reads 5 --read_length 60 --no-gaps
 cd ..
 ```
 
@@ -91,7 +93,7 @@ cd ..
 
 ```
 cd scripts
-python3 proteins.py --infile uniprot_sprot.fasta --num_proteins 100
+python3 proteins.py --infile ../data/uniprot_sprot.fasta --num_proteins 100
 cd ..
 ```
 
