@@ -105,5 +105,5 @@ python3 neighborhood.py -i [PROT_SEQ] -m 1 -t 17
 cd ../../
 ```
 
-### The query files have sample usage given as comments at the top of the file.
-### They can be run independently as well. 
+The query files have sample usage given as comments at the top of the file.
+They can be run independently as well. 
