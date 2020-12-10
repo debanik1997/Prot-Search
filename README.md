@@ -1,7 +1,8 @@
 # Prot-Search
 Computational Genomics Final Project - Shreyas Aiyar, Debanik Purkayastha, Ishita Tripathi
 
-
+## Table of Contents
+  * [Table of Contents](#table-of-contents)
   * [Directory Structure](#directory-structure)
   * [Requirements:](#requirements-)
   * [Web App:](#web-app-)
@@ -63,6 +64,7 @@ python3 data_generation.py --infile uniprot_sprot.fasta --seed 1 --num_errors 4 
 
 Note: Generate synthetic reads prior to this
 ```
+cd tests
 python3 test_suite.py --infile test_reads.txt --mm 4 --l 4
 ```
 
@@ -76,11 +78,11 @@ TODO:
 ### Generating L-mer Dictionary File
 
 ```
-TODO:
+python kmers.py --infile ../data/protein_dict_num_prots_100.pickle -k 5 -n 100
 ```
 
 ### Generating Protein Dictionary File
 
 ```
-TODO:
+python3 proteins.py --infile uniprot_sprot.fasta --num_proteins 100
 ```
