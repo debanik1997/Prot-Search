@@ -5,7 +5,7 @@ Computational Genomics Final Project - Shreyas Aiyar, Debanik Purkayastha, Ishit
   * [Table of Contents](#table-of-contents)
   * [Directory Structure](#directory-structure)
   * [Requirements](#requirements)
-  * [Web App](#web%20app)
+  * [Web App](#web-app)
   * [Testing](#testing)
   * [Misc](#misc)
 ## Directory Structure
@@ -36,7 +36,7 @@ To run the web app specifically, make sure your machine has Node.js installed. A
 Node.js - https://nodejs.org/en/download/
 yarn - https://classic.yarnpkg.com/en/docs/install/#mac-stable
 ```
-## Web App
+## Web-App
 ### To start server
 From root directory
 ```
