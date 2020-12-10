@@ -5,7 +5,7 @@ For each offset in protein sequence, try substituting all possible amino acids
 and calculating scores
 
 Usage example:
-python neighborhood.py -i TTSNT -m 1 -t 17
+python3 neighborhood.py -i TTSNT -m 1 -t 17
 
 for example: for protein AB, and possible amino acids A,B,F do
 '''
