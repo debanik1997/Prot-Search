@@ -6,16 +6,8 @@ Computational Genomics Final Project - Shreyas Aiyar, Debanik Purkayastha, Ishit
   * [Directory Structure](#directory-structure)
   * [Requirements](#requirements)
   * [Web App](#web%20app)
-    + [To start server](#to%20start%20server)
-    + [To start client](#to%20start%20client)
   * [Testing](#testing)
-    + [Generating Synthetic Reads](#generating%20synthetic%20reads)
-    + [Benchmarking/Profiling Algorithms](#benchmarking%20profiling%20algorithms)
-    + [Testing L-Mer Dictionary](#testing%20l-mer%20dictionary)
   * [Misc](#misc)
-    + [Generating L-mer Dictionary File](#generating%20l-mer%20dictionary%20file)
-    + [Generating Protein Dictionary File](#generating%20protein%20dictionary%20file)
-
 ## Directory Structure
     .
     ├── api
@@ -37,20 +29,20 @@ Computational Genomics Final Project - Shreyas Aiyar, Debanik Purkayastha, Ishit
     ├── contributions.txt
     └── README.md
 
-## Requirements:
+## Requirements
 ```
 To run the web app specifically, make sure your machine has Node.js installed. After installing Node.js, make sure that yarn is accessible as a package manager.
 
 Node.js - https://nodejs.org/en/download/
 yarn - https://classic.yarnpkg.com/en/docs/install/#mac-stable
 ```
-## Web App:
-### To start server:
+## Web App
+### To start server
 From root directory
 ```
 cd api && pip install -r requirements.txt && flask run
 ```
-### To start client:
+### To start client
 From root directory
 ```
 cd client && yarn install && yarn start
