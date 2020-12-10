@@ -1,0 +1,19 @@
+Debanik: 
+1. Implemented 6 frame translation algorithm
+2. Implemented Flask server to utilize query functions encapsulated behind POST routes
+3. Implemented React frontend for searching 
+4. Researched protein databases and identified UniProt as our database of choice
+
+Shreyas:
+1. Worked on and Implemented L-mer Filtration algorithm
+2. Implemented Synthetic read generator program
+3. Implemented test suite and benchmark program
+4. Conducted experiments for evaluation of the two algorithms 
+5. Wrote README.md 
+
+Ishita:
+1. Implemented database to lmer dictionary preprocessing script
+2. Implemented test script for kmer, 
+3. Implemented the index assisted approximate matching algorithm
+4. Implemented neighborhood search, tried to implement blast
+5. Conducted preliminary research on BLAST and similar algorithms
