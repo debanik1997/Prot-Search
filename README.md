@@ -1,12 +1,19 @@
 # Prot-Search
 Computational Genomics Final Project - Shreyas Aiyar, Debanik Purkayastha, Ishita Tripathi
 
-## Table of Contents
-- [Directory Structure](##directory%20structure)
-- [Requirements](##requirements)
-- [Web App](##web%20app)
-- [Testing](##testing)
-- [Misc](##misc)
+
+  * [Directory Structure](#directory-structure)
+  * [Requirements:](#requirements-)
+  * [Web App:](#web-app-)
+    + [To start server:](#to-start-server-)
+    + [To start client:](#to-start-client-)
+  * [Testing](#testing)
+    + [Generating Synthetic Reads](#generating-synthetic-reads)
+    + [Benchmarking/Profiling Algorithms](#benchmarking-profiling-algorithms)
+    + [Testing L-Mer Dictionary](#testing-l-mer-dictionary)
+  * [Misc](#misc)
+    + [Generating L-mer Dictionary File](#generating-l-mer-dictionary-file)
+    + [Generating Protein Dictionary File](#generating-protein-dictionary-file)
 
 ## Directory Structure
     .
@@ -72,7 +79,7 @@ TODO:
 TODO:
 ```
 
-### Generationg Protein Dictionary File
+### Generating Protein Dictionary File
 
 ```
 TODO:
