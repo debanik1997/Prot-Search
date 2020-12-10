@@ -39,7 +39,10 @@ Computational Genomics Final Project - Shreyas Aiyar, Debanik Purkayastha, Ishit
 
 ## Requirements:
 ```
-TODO:
+To run the web app specifically, make sure your machine has Node.js installed. After installing Node.js, make sure that yarn is accessible as a package manager.
+
+Node.js - https://nodejs.org/en/download/
+yarn - https://classic.yarnpkg.com/en/docs/install/#mac-stable
 ```
 ## Web App:
 ### To start server:
