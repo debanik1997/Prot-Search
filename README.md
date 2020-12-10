@@ -85,7 +85,7 @@ cd ..
 
 ```
 cd scripts
-python kmers.py --infile ../data/protein_dict_num_prots_100.pickle -k 5 -n 100
+python3 kmers.py --infile ../data/protein_dict_num_prots_100.pickle -k 5 -n 100
 cd ..
 ```
 
@@ -100,6 +100,6 @@ cd ..
 ### Neighborhood search for a sequence [PROT_SEQ]
 ```
 cd api/matching
-python neighborhood.py -i [PROT_SEQ] -m 1 -t 17
+python3 neighborhood.py -i [PROT_SEQ] -m 1 -t 17
 cd ../../
 ```
